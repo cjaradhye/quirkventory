@@ -481,9 +481,6 @@ git push origin feature/amazing-feature
 
 **⭐ If you found this project impressive, please give it a star! ⭐**
 
-*Built with ❤️ by [Your Name] - Demonstrating production-ready software engineering practices*
-
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/quirkventory?style=social)](https://github.com/yourusername/quirkventory)
-[![GitHub forks](https://img.shields.io/github/forks/yourusername/quirkventory?style=social)](https://github.com/yourusername/quirkventory/fork)
+*Built with ❤️ by Aradhye - Demonstrating production-ready software engineering practices*
 
 </div>
