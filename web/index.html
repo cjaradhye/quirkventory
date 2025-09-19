@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quirkventory - Inventory Management Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/charts.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- External Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <h1 class="logo">
+                    <span class="logo-icon">📦</span>
+                    Quirkventory
+                </h1>
+                <span class="logo-subtitle">Real-time Inventory Management</span>
+            </div>
+            
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><a href="#dashboard" class="nav-link active" data-section="dashboard">Dashboard</a></li>
+                    <li><a href="#inventory" class="nav-link" data-section="inventory">Inventory</a></li>
+                    <li><a href="#orders" class="nav-link" data-section="orders">Orders</a></li>
+                    <li><a href="#reports" class="nav-link" data-section="reports">Reports</a></li>
+                    <li><a href="#alerts" class="nav-link" data-section="alerts">Alerts</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-actions">
+                <div class="connection-status" id="connectionStatus">
+                    <span class="status-indicator offline" id="statusIndicator"></span>
+                    <span class="status-text" id="statusText">Connecting...</span>
+                </div>
+                <button class="refresh-btn" id="refreshBtn" title="Refresh Data">
+                    <span class="refresh-icon">🔄</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="content-section active">
+            <div class="section-header">
+                <h2>Dashboard Overview</h2>
+                <div class="last-updated" id="lastUpdated">Last updated: Never</div>
+            </div>
+            
+            <!-- Key Metrics Cards -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">📊</div>
+                    <div class="metric-content">
+                        <div class="metric-label">Total Products</div>
+                        <div class="metric-value" id="totalProducts">0</div>
+                        <div class="metric-change" id="productsChange">--</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">📦</div>
+                    <div class="metric-content">
+                        <div class="metric-label">Total Inventory</div>
+                        <div class="metric-value" id="totalInventory">0</div>
+                        <div class="metric-change" id="inventoryChange">--</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">💰</div>
+                    <div class="metric-content">
+                        <div class="metric-label">Total Value</div>
+                        <div class="metric-value" id="totalValue">$0.00</div>
+                        <div class="metric-change" id="valueChange">--</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card warning">
+                    <div class="metric-icon">⚠️</div>
+                    <div class="metric-content">
+                        <div class="metric-label">Low Stock Items</div>
+                        <div class="metric-value" id="lowStockCount">0</div>
+                        <div class="metric-change" id="lowStockChange">--</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts and Widgets -->
+            <div class="dashboard-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Inventory Distribution</h3>
+                        <select id="inventoryChartType" class="chart-selector">
+                            <option value="category">By Category</option>
+                            <option value="stock">By Stock Level</option>
+                            <option value="value">By Value</option>
+                        </select>
+                    </div>
+                    <canvas id="inventoryChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Recent Activity</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn" id="pauseUpdates">⏸️ Pause</button>
+                            <button class="chart-btn" id="clearActivity">🗑️ Clear</button>
+                        </div>
+                    </div>
+                    <div class="activity-feed" id="activityFeed">
+                        <div class="activity-item placeholder">
+                            <div class="activity-icon">📡</div>
+                            <div class="activity-content">
+                                <div class="activity-text">Waiting for real-time updates...</div>
+                                <div class="activity-time">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3>Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="action-btn primary" id="addProductBtn">
+                        <span class="action-icon">➕</span>
+                        Add Product
+                    </button>
+                    <button class="action-btn secondary" id="processOrderBtn">
+                        <span class="action-icon">📋</span>
+                        Process Order
+                    </button>
+                    <button class="action-btn secondary" id="generateReportBtn">
+                        <span class="action-icon">📊</span>
+                        Generate Report
+                    </button>
+                    <button class="action-btn warning" id="viewAlertsBtn">
+                        <span class="action-icon">🚨</span>
+                        View Alerts
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inventory Section -->
+        <section id="inventory-section" class="content-section">
+            <div class="section-header">
+                <h2>Inventory Management</h2>
+                <div class="section-actions">
+                    <input type="text" id="searchProducts" placeholder="Search products..." class="search-input">
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="">All Categories</option>
+                    </select>
+                    <button class="btn primary" id="addNewProduct">Add Product</button>
+                </div>
+            </div>
+            
+            <div class="inventory-table-container">
+                <table class="inventory-table" id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="table-pagination" id="inventoryPagination">
+                <!-- Pagination controls -->
+            </div>
+        </section>
+
+        <!-- Orders Section -->
+        <section id="orders-section" class="content-section">
+            <div class="section-header">
+                <h2>Order Management</h2>
+                <div class="section-actions">
+                    <select id="orderStatusFilter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <button class="btn primary" id="createNewOrder">Create Order</button>
+                </div>
+            </div>
+            
+            <div class="orders-container">
+                <div class="orders-list" id="ordersList">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports-section" class="content-section">
+            <div class="section-header">
+                <h2>Reports & Analytics</h2>
+            </div>
+            
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>Sales Report</h3>
+                    <p>Generate comprehensive sales analysis</p>
+                    <button class="btn primary" id="generateSalesReport">Generate</button>
+                </div>
+                
+                <div class="report-card">
+                    <h3>Inventory Report</h3>
+                    <p>Detailed inventory status and analysis</p>
+                    <button class="btn primary" id="generateInventoryReport">Generate</button>
+                </div>
+                
+                <div class="report-card">
+                    <h3>Low Stock Report</h3>
+                    <p>Products requiring immediate attention</p>
+                    <button class="btn warning" id="generateLowStockReport">Generate</button>
+                </div>
+            </div>
+            
+            <div class="report-viewer" id="reportViewer">
+                <!-- Report content will be displayed here -->
+            </div>
+        </section>
+
+        <!-- Alerts Section -->
+        <section id="alerts-section" class="content-section">
+            <div class="section-header">
+                <h2>System Alerts</h2>
+                <div class="section-actions">
+                    <button class="btn secondary" id="markAllRead">Mark All Read</button>
+                    <button class="btn secondary" id="clearAlerts">Clear All</button>
+                </div>
+            </div>
+            
+            <div class="alerts-container">
+                <div class="alerts-list" id="alertsList">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <!-- Add Product Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Product</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="addProductForm" class="modal-form">
+                <div class="form-group">
+                    <label for="productId">Product ID</label>
+                    <input type="text" id="productId" name="productId" required>
+                </div>
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" name="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <input type="text" id="productCategory" name="productCategory" required>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price</label>
+                    <input type="number" id="productPrice" name="productPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="productQuantity">Quantity</label>
+                    <input type="number" id="productQuantity" name="productQuantity" required>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="isPerishable" name="isPerishable">
+                        Perishable Product
+                    </label>
+                </div>
+                <div class="form-group" id="expiryDateGroup" style="display: none;">
+                    <label for="expiryDate">Expiry Date</label>
+                    <input type="datetime-local" id="expiryDate" name="expiryDate">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn secondary modal-cancel">Cancel</button>
+                    <button type="submit" class="btn primary">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Order Modal -->
+    <div id="createOrderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Order</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="createOrderForm" class="modal-form">
+                <div class="form-group">
+                    <label for="orderId">Order ID</label>
+                    <input type="text" id="orderId" name="orderId" required>
+                </div>
+                <div class="order-items" id="orderItems">
+                    <h4>Order Items</h4>
+                    <div class="order-item">
+                        <select class="product-select" name="productId" required>
+                            <option value="">Select Product</option>
+                        </select>
+                        <input type="number" name="quantity" placeholder="Quantity" min="1" required>
+                        <button type="button" class="btn-remove-item">Remove</button>
+                    </div>
+                </div>
+                <button type="button" class="btn secondary" id="addOrderItem">Add Item</button>
+                <div class="modal-actions">
+                    <button type="button" class="btn secondary modal-cancel">Cancel</button>
+                    <button type="submit" class="btn primary">Create Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notificationToast" class="notification-toast">
+        <div class="toast-content">
+            <span class="toast-icon"></span>
+            <span class="toast-message"></span>
+        </div>
+        <button class="toast-close">&times;</button>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading...</div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/websocket.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/orders.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/alerts.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

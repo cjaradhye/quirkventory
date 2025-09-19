@@ -1,0 +1,2 @@
+/usr/bin/ar qc libquirkventory_lib.a CMakeFiles/quirkventory_lib.dir/src/Product.cpp.o CMakeFiles/quirkventory_lib.dir/src/Inventory.cpp.o CMakeFiles/quirkventory_lib.dir/src/Order.cpp.o CMakeFiles/quirkventory_lib.dir/src/User.cpp.o CMakeFiles/quirkventory_lib.dir/src/NotificationSystem.cpp.o CMakeFiles/quirkventory_lib.dir/src/CLI.cpp.o CMakeFiles/quirkventory_lib.dir/src/HTTPServer.cpp.o
+/usr/bin/ranlib libquirkventory_lib.a
