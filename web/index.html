@@ -154,39 +154,68 @@
         </section>
 
         <!-- Inventory Section -->
-        <section id="inventory-section" class="content-section">
+                <!-- Inventory Section -->
+        <section class="section" id="inventory-section">
             <div class="section-header">
                 <h2>Inventory Management</h2>
                 <div class="section-actions">
-                    <input type="text" id="searchProducts" placeholder="Search products..." class="search-input">
-                    <select id="categoryFilter" class="filter-select">
-                        <option value="">All Categories</option>
-                    </select>
-                    <button class="btn primary" id="addNewProduct">Add Product</button>
+                    <button class="btn btn-primary" id="add-product-btn">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                    <button class="btn btn-secondary" id="export-btn">
+                        <i class="fas fa-download"></i> Export
+                    </button>
                 </div>
             </div>
             
+            <div class="filters-toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Search products...">
+                </div>
+                <div class="filter-group">
+                    <select id="category-filter">
+                        <option value="">All Categories</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="books">Books</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="furniture">Furniture</option>
+                    </select>
+                    <select id="status-filter">
+                        <option value="">All Status</option>
+                        <option value="in-stock">In Stock</option>
+                        <option value="low-stock">Low Stock</option>
+                        <option value="out-of-stock">Out of Stock</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="inventory-table-container">
-                <table class="inventory-table" id="inventoryTable">
+                <table class="inventory-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Product ID</th>
                             <th>Name</th>
                             <th>Category</th>
+                            <th>Stock</th>
                             <th>Price</th>
-                            <th>Quantity</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="inventoryTableBody">
-                        <!-- Dynamic content -->
+                    <tbody id="inventory-table-body">
+                        <!-- Inventory items will be populated here -->
                     </tbody>
                 </table>
-            </div>
-            
-            <div class="table-pagination" id="inventoryPagination">
-                <!-- Pagination controls -->
+                <div class="table-pagination">
+                    <div class="pagination-info">
+                        Showing <span id="items-start">1</span> to <span id="items-end">10</span> of <span id="total-items">10</span> items
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="pagination-btn" id="prev-page" disabled>Previous</button>
+                        <button class="pagination-btn" id="next-page" disabled>Next</button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -208,7 +237,10 @@
             
             <div class="orders-container">
                 <div class="orders-list" id="ordersList">
-                    <!-- Dynamic content -->
+                    <!-- Order cards will be populated by sample data -->
+                </div>
+            </div>
+        </section>
                 </div>
             </div>
         </section>
@@ -256,7 +288,7 @@
             
             <div class="alerts-container">
                 <div class="alerts-list" id="alertsList">
-                    <!-- Dynamic content -->
+                    <!-- Alert items will be populated by sample data -->
                 </div>
             </div>
         </section>
@@ -360,6 +392,7 @@
     <script src="js/api.js"></script>
     <script src="js/websocket.js"></script>
     <script src="js/dashboard.js"></script>
+    <script src="js/sample-data.js"></script>
     <script src="js/inventory.js"></script>
     <script src="js/orders.js"></script>
     <script src="js/reports.js"></script>
@@ -368,5 +401,15 @@
     <script src="js/notifications.js"></script>
     <script src="js/charts.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        // Initialize sample data when the page loads
+        $(document).ready(function() {
+            const loader = new SampleDataLoader();
+            loader.loadDashboardData();
+            loader.loadInventoryTable();
+            loader.loadOrdersList();
+            loader.loadAlertsList();
+        });
+    </script>
 </body>
 </html>

@@ -83,11 +83,11 @@ public:
 
     // Disable copy constructor and assignment operator for thread safety
     Order(const Order&) = delete;
-    Order& operator=(const Order&) = delete;
+    Order& operator=(Order&) = delete;
 
-    // Enable move constructor and assignment operator
-    Order(Order&&) = default;
-    Order& operator=(Order&&) = default;
+    // Disable move constructor and assignment operator due to mutex
+    Order(Order&&) = delete;
+    Order& operator=(Order&&) = delete;
 
     // Getters
     const std::string& getOrderId() const { return order_id_; }

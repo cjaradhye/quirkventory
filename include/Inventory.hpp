@@ -51,9 +51,9 @@ public:
     Inventory(const Inventory&) = delete;
     Inventory& operator=(const Inventory&) = delete;
 
-    // Enable move constructor and assignment operator
-    Inventory(Inventory&&) = default;
-    Inventory& operator=(Inventory&&) = default;
+    // Disable move constructor and assignment operator due to mutex
+    Inventory(Inventory&&) = delete;
+    Inventory& operator=(Inventory&&) = delete;
 
     /**
      * @brief Add a product to the inventory

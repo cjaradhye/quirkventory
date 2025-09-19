@@ -326,7 +326,10 @@ HTTPResponse HTTPServer::handlePostProduct(const HTTPRequest& request) {
             return createErrorResponse(400, "Product ID and name are required");
         }
         
-        auto product = std::make_unique<Product>(id, name, category, price, quantity);
+        // Use PerishableProduct with very long expiry for non-perishable products
+        auto far_future = std::chrono::system_clock::now() + std::chrono::hours(24 * 365 * 10); // 10 years
+        auto product = std::make_unique<PerishableProduct>(id, name, category, price, quantity,
+                                                          far_future, "Standard storage", 20.0);
         
         if (inventory_->addProduct(std::move(product))) {
             return createJSONResponse(JSONUtils::formatSuccessJSON("Product created successfully"));

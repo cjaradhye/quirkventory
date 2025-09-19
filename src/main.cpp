@@ -1,4 +1,4 @@
-#include "include/CLI.hpp"
+#include "CLI.hpp"
 #include <iostream>
 #include <exception>
 

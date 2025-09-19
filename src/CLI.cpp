@@ -279,9 +279,12 @@ void CLI::createDefaultUsers() {
 }
 
 void CLI::loadSampleData() {
-    // Add sample products
-    auto product1 = std::make_unique<Product>("P001", "Laptop Computer", "Electronics", 999.99, 10);
-    auto product2 = std::make_unique<Product>("P002", "Office Chair", "Furniture", 199.99, 25);
+    // Add sample products using PerishableProduct (with very long expiry dates for non-perishables)
+    auto far_future = std::chrono::system_clock::now() + std::chrono::hours(24 * 365 * 10); // 10 years from now
+    auto product1 = std::make_unique<PerishableProduct>("P001", "Laptop Computer", "Electronics", 999.99, 10, 
+                                                       far_future, "Store in dry place", 25.0);
+    auto product2 = std::make_unique<PerishableProduct>("P002", "Office Chair", "Furniture", 199.99, 25,
+                                                       far_future, "Store upright", 22.0);
     
     // Add perishable product
     auto future_date = std::chrono::system_clock::now() + std::chrono::hours(24 * 30); // 30 days from now
@@ -428,7 +431,10 @@ void CLI::handleAddProduct() {
         product = std::make_unique<PerishableProduct>(id, name, category, price, quantity,
                                                      expiry_date, storage_requirements, storage_temp);
     } else {
-        product = std::make_unique<Product>(id, name, category, price, quantity);
+        // For non-perishable products, use PerishableProduct with very long expiry
+        auto far_future = std::chrono::system_clock::now() + std::chrono::hours(24 * 365 * 10); // 10 years
+        product = std::make_unique<PerishableProduct>(id, name, category, price, quantity,
+                                                     far_future, "Standard storage", 20.0);
     }
     
     if (inventory_->addProduct(std::move(product))) {

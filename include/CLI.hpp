@@ -9,6 +9,7 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include <cfloat>
 #include <functional>
 
 namespace quirkventory {
