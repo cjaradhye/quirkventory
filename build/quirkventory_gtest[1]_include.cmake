@@ -1,0 +1,5 @@
+if(EXISTS "/Users/zwarup.cj/Documents/projects/quirkventory/build/quirkventory_gtest[1]_tests.cmake")
+  include("/Users/zwarup.cj/Documents/projects/quirkventory/build/quirkventory_gtest[1]_tests.cmake")
+else()
+  add_test(quirkventory_gtest_NOT_BUILT quirkventory_gtest_NOT_BUILT)
+endif()
