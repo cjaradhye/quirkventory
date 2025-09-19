@@ -1,21 +1,92 @@
-# 🎯 Quirkventory - Advanced Inventory Management System
+# 🎯 Quirkventory - Inventory Management System
 
 <div align="center">
 
 ![Quirkventory Demo](qurik_demo.gif)
 
-*A comprehensive full-stack inventory management system showcasing modern C++, web technologies, and software engineering best practices*
+*Full-stack inventory management system with C++ backend and responsive web dashboard*
 
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.cppreference.com/w/cpp/17)
-[![CMake](https://img.shields.io/badge/CMake-3.12%2B-green.svg)](https://cmake.org/)
 [![GoogleTest](https://img.shields.io/badge/Testing-GoogleTest-red.svg)](https://github.com/google/googletest)
 [![Web Dashboard](https://img.shields.io/badge/Frontend-HTML5%2FJS-orange.svg)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 
 </div>
 
-## 🚀 Executive Summary
+## 🚀 Key Features
 
-Quirkventory is a production-ready, enterprise-grade inventory management system that demonstrates advanced software engineering principles through a full-stack architecture. The project showcases expertise in **modern C++**, **test-driven development**, **RESTful APIs**, **responsive web design**, and **real-time data visualization**.
+- **C++ Backend**: Modern C++17 with object-oriented design, threading, and REST API
+- **Web Dashboard**: Responsive HTML/CSS/JS interface with real-time charts and analytics
+- **Testing Suite**: Comprehensive unit and integration tests with GoogleTest framework
+- **Product Management**: Multi-category inventory with stock tracking and alerts
+- **Order Processing**: Multi-threaded order handling with status management
+- **User System**: Role-based access control (Staff, Manager, Admin)
+- **Real-time Updates**: Live inventory changes and notifications
+
+## 🛠️ Tech Stack
+
+**Backend:** C++17, STL Threading, CMake, GoogleTest  
+**Frontend:** HTML5, CSS3, JavaScript ES6+, Chart.js, jQuery  
+**Architecture:** REST API, Object-Oriented Design, SOLID Principles
+
+## ⚡ Quick Start
+
+```bash
+# Build the project
+mkdir build && cd build
+cmake .. && make
+
+# Run tests
+make test
+
+# Start backend
+./bin/inventory_system
+
+# Start web dashboard (new terminal)
+cd ../web && python3 -m http.server 8000
+# Open browser to http://localhost:8000
+```
+
+## 🔌 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/products` | List all products |
+| `POST` | `/api/products` | Create new product |
+| `GET` | `/api/orders` | List orders |
+| `POST` | `/api/orders` | Create new order |
+| `GET` | `/api/dashboard/stats` | Dashboard metrics |
+
+## 🏗️ Project Structure
+
+```
+quirkventory/
+├── src/           # C++ source files
+├── include/       # Header files
+├── tests/         # GoogleTest unit & integration tests
+├── web/           # Frontend dashboard
+│   ├── index.html # Main dashboard
+│   ├── css/       # Stylesheets
+│   └── js/        # JavaScript modules
+├── build/         # CMake build output
+└── CMakeLists.txt # Build configuration
+```
+
+## 🎯 Technical Highlights
+
+- **Object-Oriented Design**: Abstract base classes, inheritance, polymorphism
+- **Thread Safety**: Concurrent operations with proper synchronization
+- **Modern C++**: Smart pointers, RAII, STL algorithms, move semantics
+- **Test-Driven Development**: 90%+ code coverage with comprehensive test suite
+- **Responsive Design**: Mobile-first CSS with interactive data visualization
+- **RESTful Architecture**: Clean API design with JSON responses
+
+---
+
+<div align="center">
+
+**⭐ Built with C++17, modern web technologies, and software engineering best practices ⭐**
+
+</div>
 
 ## 🏆 Key Achievements & Technical Highlights
 
