@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Quirkventory Demo](quirk_demo.gif)
+![Quirkventory Demo](qurik_demo.gif)
 
 *A comprehensive full-stack inventory management system showcasing modern C++, web technologies, and software engineering best practices*
 
